@@ -1,0 +1,380 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rekomendasi Menu Kantin</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background: #f4f8ff;
+    color: #39465c;
+}
+
+header {
+    background: linear-gradient(135deg, #ffadd2, #91caff);
+    color: white;
+    text-align: center;
+    padding: 40px 15px;
+    border-radius: 0 0 30px 30px;
+}
+
+header h1 {
+    font-size: 28px;
+    margin-bottom: 10px;
+}
+
+header p {
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+.container {
+    max-width: 1000px;
+    margin: auto;
+    padding: 25px 18px;
+}
+
+.search {
+    width: 100%;
+    padding: 14px;
+    border: 2px solid #c5dcff;
+    border-radius: 15px;
+    outline: none;
+    font-size: 15px;
+    margin-bottom: 18px;
+}
+
+.categories {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 25px;
+}
+
+.categories button {
+    border: none;
+    background: #dceaff;
+    color: #4774b9;
+    padding: 10px 17px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.categories button.active,
+.categories button:hover {
+    background: #f28fbd;
+    color: white;
+}
+
+.random-btn {
+    border: none;
+    background: linear-gradient(90deg, #f28fbd, #78b8f5);
+    color: white;
+    width: 100%;
+    padding: 14px;
+    border-radius: 15px;
+    cursor: pointer;
+    margin-bottom: 25px;
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.section-title {
+    margin-bottom: 18px;
+    color: #e477ad;
+}
+
+.menu-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 18px;
+}
+
+.menu-card {
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px #9fc7ee55;
+    transition: 0.3s;
+}
+
+.menu-card:hover {
+    transform: translateY(-5px);
+}
+
+.food-image {
+    background: linear-gradient(135deg, #ffe0ef, #dceaff);
+    height: 135px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 65px;
+}
+
+.menu-info {
+    padding: 17px;
+}
+
+.menu-info h3 {
+    margin-bottom: 7px;
+}
+
+.menu-info p {
+    font-size: 13px;
+    color: #8290a5;
+    margin-bottom: 12px;
+}
+
+.price {
+    color: #e477ad;
+    font-weight: bold;
+    font-size: 17px;
+}
+
+.tag {
+    display: inline-block;
+    background: #e9f2ff;
+    color: #578acb;
+    padding: 5px 10px;
+    border-radius: 10px;
+    font-size: 11px;
+    margin-top: 10px;
+}
+
+.empty {
+    text-align: center;
+    padding: 30px;
+    color: #8290a5;
+    display: none;
+}
+
+/* IDENTITAS KELOMPOK */
+.team {
+    margin-top: 45px;
+    padding: 28px 18px;
+    background: linear-gradient(135deg, #ffe2ef, #dcecff);
+    border-radius: 25px;
+    text-align: center;
+}
+
+.team h2 {
+    color: #c85c98;
+    margin-bottom: 8px;
+}
+
+.team p {
+    color: #7185a5;
+    font-size: 13px;
+    margin-bottom: 20px;
+}
+
+.team-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 12px;
+}
+
+.member {
+    background: white;
+    padding: 16px 10px;
+    border-radius: 15px;
+    color: #597db5;
+    font-weight: bold;
+    box-shadow: 0 3px 10px #a7bfe455;
+}
+
+.member span {
+    display: block;
+    font-size: 23px;
+    margin-bottom: 8px;
+}
+
+footer {
+    text-align: center;
+    padding: 25px;
+    color: #8290a5;
+    font-size: 13px;
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>🌸 Kantin Favorit 🩵</h1>
+    <p>Temukan menu makanan dan minuman favoritmu!</p>
+    <p>✨ Enak, hemat, dan bikin semangat ✨</p>
+</header>
+
+<div class="container">
+
+    <input
+        type="text"
+        id="search"
+        class="search"
+        placeholder="🔍 Cari menu favoritmu..."
+        oninput="renderMenu()"
+    >
+
+    <div class="categories">
+        <button class="active" onclick="filterMenu('Semua', this)">Semua</button>
+        <button onclick="filterMenu('Makanan', this)">🍜 Makanan</button>
+        <button onclick="filterMenu('Camilan', this)">🍟 Camilan</button>
+        <button onclick="filterMenu('Minuman', this)">🥤 Minuman</button>
+    </div>
+
+    <button class="random-btn" onclick="randomMenu()">
+        🎲 Pilihkan Menu Untukku!
+    </button>
+
+    <h2 class="section-title">🍓 Rekomendasi Menu</h2>
+
+    <div class="menu-grid" id="menuGrid"></div>
+
+    <div class="empty" id="empty">
+        Menu tidak ditemukan 😢
+    </div>
+
+    <!-- IDENTITAS ANGGOTA KELOMPOK -->
+    <div class="team">
+        <h2>💗 Our Team 🩵</h2>
+        <p>Kelompok Pembuat Website Rekomendasi Menu Kantin</p>
+
+        <div class="team-list">
+
+            <div class="member">
+                <span>🌷</span>
+                Nurul Wahidah
+            </div>
+
+            <div class="member">
+                <span>🦋</span>
+                Anggita Virayanti
+            </div>
+
+            <div class="member">
+                <span>🌸</span>
+                Qayla Aurora
+            </div>
+
+            <div class="member">
+                <span>💠</span>
+                Sahla Madina
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<footer>
+    <p>💗 Kantin Favorit 🩵</p>
+    <p>Teman terbaik saat lapar di sekolah!</p>
+    <p>© 2026 | Our Team</p>
+</footer>
+
+<script>
+
+const menus = [
+    {nama:"Nasi Goreng",kategori:"Makanan",harga:12000,emoji:"🍛",deskripsi:"Nasi goreng lezat dengan telur."},
+    {nama:"Mie Ayam",kategori:"Makanan",harga:10000,emoji:"🍜",deskripsi:"Mie ayam hangat dan gurih."},
+    {nama:"Nasi Kuning",kategori:"Makanan",harga:10000,emoji:"🍚",deskripsi:"Nasi kuning dengan lauk sederhana."},
+    {nama:"Bakso",kategori:"Makanan",harga:12000,emoji:"🍲",deskripsi:"Bakso hangat dengan kuah gurih."},
+    {nama:"Roti Bakar",kategori:"Camilan",harga:7000,emoji:"🍞",deskripsi:"Roti bakar dengan topping cokelat."},
+    {nama:"Kentang Goreng",kategori:"Camilan",harga:8000,emoji:"🍟",deskripsi:"Kentang renyah dan gurih."},
+    {nama:"Pisang Goreng",kategori:"Camilan",harga:5000,emoji:"🍌",deskripsi:"Pisang goreng hangat dan manis."},
+    {nama:"Es Teh",kategori:"Minuman",harga:4000,emoji:"🧋",deskripsi:"Es teh segar untuk menemani makan."},
+    {nama:"Jus Alpukat",kategori:"Minuman",harga:8000,emoji:"🥑",deskripsi:"Jus alpukat yang lembut dan segar."},
+    {nama:"Es Jeruk",kategori:"Minuman",harga:5000,emoji:"🍊",deskripsi:"Minuman jeruk segar."}
+];
+
+let kategoriAktif = "Semua";
+
+function renderMenu() {
+    const grid = document.getElementById("menuGrid");
+    const keyword = document.getElementById("search").value.toLowerCase();
+
+    grid.innerHTML = "";
+
+    const hasil = menus.filter(menu => {
+        const cocokKategori =
+            kategoriAktif === "Semua" ||
+            menu.kategori === kategoriAktif;
+
+        const cocokNama =
+            menu.nama.toLowerCase().includes(keyword);
+
+        return cocokKategori && cocokNama;
+    });
+
+    document.getElementById("empty").style.display =
+        hasil.length === 0 ? "block" : "none";
+
+    hasil.forEach(menu => {
+        grid.innerHTML += `
+            <div class="menu-card">
+                <div class="food-image">${menu.emoji}</div>
+                <div class="menu-info">
+                    <h3>${menu.nama}</h3>
+                    <p>${menu.deskripsi}</p>
+                    <div class="price">
+                        Rp${menu.harga.toLocaleString("id-ID")}
+                    </div>
+                    <span class="tag">${menu.kategori}</span>
+                </div>
+            </div>
+        `;
+    });
+}
+
+function filterMenu(kategori, tombol) {
+    kategoriAktif = kategori;
+
+    document.querySelectorAll(".categories button")
+        .forEach(btn => btn.classList.remove("active"));
+
+    tombol.classList.add("active");
+    renderMenu();
+}
+
+function randomMenu() {
+    const keyword = document.getElementById("search").value.toLowerCase();
+
+    const pilihan = menus.filter(menu =>
+        (kategoriAktif === "Semua" || menu.kategori === kategoriAktif) &&
+        menu.nama.toLowerCase().includes(keyword)
+    );
+
+    if (pilihan.length === 0) {
+        alert("Menu tidak ditemukan!");
+        return;
+    }
+
+    const acak = pilihan[Math.floor(Math.random() * pilihan.length)];
+
+    alert(
+        "🎉 Menu pilihanmu hari ini!\n\n" +
+        acak.emoji + " " + acak.nama +
+        "\nHarga: Rp" + acak.harga.toLocaleString("id-ID") +
+        "\n\n" + acak.deskripsi
+    );
+}
+
+renderMenu();
+
+</script>
+
+</body>
+  </html>
+  
